@@ -1,0 +1,27 @@
+name: Build and upload
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: UbuntuLatest32Cores128G
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/determinate-nix-action@v3
+
+      - uses: DeterminateSystems/flakehub-cache-action@main
+
+      - run: nix build .#iso
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nixos-with-determinate.iso
+          path: ./result/iso/*
+          retention-days: 90
