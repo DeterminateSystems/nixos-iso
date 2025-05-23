@@ -1,6 +1,7 @@
 {
   inputs.nixpkgs.url = "github:determinatesystems/nixpkgs/installer";
-  inputs.determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*"; # */
+  inputs.determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+  inputs.fh.url = "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz";
 
   outputs =
     {
@@ -18,10 +19,12 @@
         modules = [
           # Load the Determinate module
           determinate.nixosModules.default
+          inputs.fh.url = "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz";
           "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal-combined.nix"
           (
-            { options, ... }:
+            { options, pkgs, ... }:
             {
+              environment.systemPackages = [ fh.packages.x86_64-linux.default ];
               environment.etc."nixos/flake.nix" = {
                 source = ./flake.nix;
                 mode = "0644";
