@@ -8,6 +8,7 @@
       self,
       determinate,
       nixpkgs,
+      fh,
       ...
     }:
     {
@@ -19,12 +20,11 @@
         modules = [
           # Load the Determinate module
           determinate.nixosModules.default
-          inputs.fh.url = "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz";
           "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal-combined.nix"
           (
-            { options, pkgs, ... }:
+            { options, pkgs, lib, ... }:
             {
-              environment.systemPackages = [ fh.packages.x86_64-linux.default ];
+              environment.systemPackages = [ fh.packages.${pkgs.stdenv.hostPlatform.system}.default ];
               environment.etc."nixos/flake.nix" = {
                 source = ./flake.nix;
                 mode = "0644";
@@ -38,19 +38,29 @@
                 Flake=1
               '';
 
+              networking.wireless.enable = lib.mkForce false;
+              networking.networkmanager.enable = true;
+
               system.nixos-generate-config.flake = ''
                 {
                   inputs = {
                     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
                     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1"; # NixOS, rolling release
                     # nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0"; # NixOS, current stable
+                    inputs.fh.url = "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz";
                   };
-                  outputs = inputs\@{ self, nixpkgs, determinate, ... }: {
+                  outputs = inputs\@{ self, nixpkgs, determinate, fh, ... }: {
                     # NOTE: '${options.networking.hostName.default}' is the default hostname
                     nixosConfigurations.${options.networking.hostName.default} = nixpkgs.lib.nixosSystem {
                       modules = [
                         determinate.nixosModule.default
                         ./configuration.nix
+                        (
+                          { options, pkgs, ... }:
+                          {
+                            environment.systemPackages = [ fh.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+                          }
+                        )
                       ];
                     };
                   };
