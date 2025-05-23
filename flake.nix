@@ -47,20 +47,13 @@
                     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
                     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1"; # NixOS, rolling release
                     # nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0"; # NixOS, current stable
-                    inputs.fh.url = "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz";
                   };
-                  outputs = inputs\@{ self, nixpkgs, determinate, fh, ... }: {
+                  outputs = inputs\@{ self, nixpkgs, determinate, ... }: {
                     # NOTE: '${options.networking.hostName.default}' is the default hostname
                     nixosConfigurations.${options.networking.hostName.default} = nixpkgs.lib.nixosSystem {
                       modules = [
                         determinate.nixosModule.default
                         ./configuration.nix
-                        (
-                          { options, pkgs, ... }:
-                          {
-                            environment.systemPackages = [ fh.packages.${pkgs.stdenv.hostPlatform.system}.default ];
-                          }
-                        )
                       ];
                     };
                   };
