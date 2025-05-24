@@ -7,7 +7,16 @@ on:
 
 jobs:
   build:
-    runs-on: UbuntuLatest32Cores128G
+    strategy:
+      matrix:
+        runners:
+          - runner: UbuntuLatest32Cores128G
+            system: x86_64-linux
+
+          - runner: UbuntuLatest32Cores128GArm
+            system: aarch64-linux
+
+    runs-on: ${{ matrix.runners.runner }}
     permissions:
       id-token: write
       contents: write
@@ -18,10 +27,14 @@ jobs:
 
       - uses: DeterminateSystems/flakehub-cache-action@main
 
-      - run: nix build .#iso
+      - run: nix develop --command nixfmt --check .
+        if: success() || failure()
+
+      - run: nix build .#packages.${{ matrix.runners.system }}.iso
+        if: success() || failure()
 
       - uses: actions/upload-artifact@v4
         with:
-          name: nixos-with-determinate.iso
+          name: nixos-with-determinate-${{ matrix.runners.system }}.iso
           path: ./result/iso/*
           retention-days: 90
