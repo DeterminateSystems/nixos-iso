@@ -28,6 +28,7 @@ On both systems, the ISOs have these tools installed:
   fh apply nixos "my-org/my-flake/*#nixosConfigurations.my-nixos-configuration-output"
   ```
 
+Note: this NixOS installer image is identical to NixOS's ISOs, but with flakes enabled by default via Determinate Nix and NetworkManager being enabled instead of bare WPA Supplicant.
 [ami]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html
 [fh-apply-nixos]: https://docs.determinate.systems/flakehub/cli#apply-nixos
 [cache]: https://docs.determinate.systems/flakehub/cache
