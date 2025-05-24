@@ -27,7 +27,11 @@ jobs:
 
       - uses: DeterminateSystems/flakehub-cache-action@main
 
+      - run: nix develop --command nixfmt --check .
+        if: success() || failure()
+
       - run: nix build .#packages.${{ matrix.runners.system }}.iso
+        if: success() || failure()
 
       - uses: actions/upload-artifact@v4
         with:
