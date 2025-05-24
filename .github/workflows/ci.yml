@@ -1,0 +1,60 @@
+name: Build and upload
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        runners:
+          - runner: UbuntuLatest32Cores128G
+            system: x86_64-linux
+
+          - runner: UbuntuLatest32Cores128GArm
+            system: aarch64-linux
+
+    runs-on: ${{ matrix.runners.runner }}
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/determinate-nix-action@v3
+
+      - uses: DeterminateSystems/flakehub-cache-action@main
+
+      - run: nix develop --command nixfmt --check .
+        if: success() || failure()
+
+      - run: nix build .#packages.${{ matrix.runners.system }}.iso
+        if: success() || failure()
+
+      - uses: actions/upload-artifact@v4
+        if: github.ref_type != 'tag'
+        with:
+          name: nixos-with-determinate-${{ matrix.runners.system }}.iso
+          path: ./result/iso/*
+          retention-days: 90
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          prerelease: true
+          files: ./result/iso/*
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: ${{ github.ref_type == 'tag' && 'production' || 'build' }}
+    steps:
+      - run: "true"
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          prerelease: false
