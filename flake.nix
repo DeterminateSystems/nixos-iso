@@ -98,7 +98,7 @@
                         # NOTE: '${options.networking.hostName.default}' is the default hostname
                         nixosConfigurations.${options.networking.hostName.default} = nixpkgs.lib.nixosSystem {
                           modules = [
-                            determinate.nixosModule.default
+                            determinate.nixosModules.default
                             ./configuration.nix
                           ];
                         };
