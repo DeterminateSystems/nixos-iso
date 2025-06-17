@@ -1,5 +1,5 @@
 {
-  inputs.nixpkgs.url = "github:determinatesystems/nixpkgs/installer";
+  inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
   inputs.determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
   inputs.fh.url = "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz";
 
