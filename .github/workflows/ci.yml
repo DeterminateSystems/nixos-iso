@@ -35,18 +35,10 @@ jobs:
         if: success() || failure()
 
       - uses: actions/upload-artifact@v4
-        if: github.ref_type != 'tag'
         with:
           name: nixos-with-determinate-${{ matrix.runners.system }}.iso
           path: ./result/iso/*
-          retention-days: 90
-
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        if: github.ref_type == 'tag'
-        with:
-          prerelease: true
-          files: ./result/iso/*
+          retention-days: 7
 
   release:
     runs-on: ubuntu-latest
@@ -59,3 +51,30 @@ jobs:
         if: github.ref_type == 'tag'
         with:
           prerelease: false
+
+      - name: Download x86_64-linux iso
+        uses: actions/download-artifact@v4
+        with:
+          name: nixos-with-determinate-x86_64-linux.iso
+          path: ./nixos-with-determinate-x86_64-linux
+
+      - name: Download aarch64-linux iso
+        uses: actions/download-artifact@v4
+        with:
+          name: nixos-with-determinate-aarch64-linux.iso
+          path: ./nixos-with-determinate-aarch64-linux
+
+      - run: |
+          ls -la ./nixos-with-determinate-aarch64-linux
+          ls -la ./nixos-with-determinate-x86_64-linux
+          cp ./nixos-with-determinate-x86_64-linux/nixos-with-determinate-x86_64-linux.iso ./outputs/nixos-with-determinate.iso-x86_64-linux
+          cp ./nixos-with-determinate-aarch64-linux/nixos-with-determinate-aarch64-linux.iso ./outputs/nixos-with-determinate.iso-aarch64-linux
+          ls -la outputs outputs/*
+
+      - uses: DeterminateSystems/push-artifact-ids@main
+        with:
+          s3_upload_role: ${{ secrets.AWS_S3_UPLOAD_ROLE }}
+          bucket: ${{ secrets.AWS_S3_UPLOAD_BUCKET }}
+          directory: ./outputs
+          ids_project_name: nixos-iso
+          ids_binary_prefix: nixos-with-determinate.iso
