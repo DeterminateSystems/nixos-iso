@@ -46,11 +46,6 @@ jobs:
       id-token: write
     steps:
       - run: "true"
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        if: github.ref_type == 'tag'
-        with:
-          prerelease: false
 
       - name: Download x86_64-linux iso
         uses: actions/download-artifact@v4
