@@ -42,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment: ${{ github.ref_type == 'tag' && 'production' || 'build' }}
+    permissions:
+      id-token: write
     steps:
       - run: "true"
       - name: Release
@@ -63,10 +65,11 @@ jobs:
           path: ./nixos-with-determinate-aarch64-linux
 
       - run: |
-          ls -la ./nixos-with-determinate-aarch64-linux
-          ls -la ./nixos-with-determinate-x86_64-linux
-          cp ./nixos-with-determinate-x86_64-linux/nixos-with-determinate-x86_64-linux.iso ./outputs/nixos-with-determinate.iso-x86_64-linux
-          cp ./nixos-with-determinate-aarch64-linux/nixos-with-determinate-aarch64-linux.iso ./outputs/nixos-with-determinate.iso-aarch64-linux
+          mkdir outputs
+          find ./nixos-with-determinate-aarch64-linux
+          find ./nixos-with-determinate-x86_64-linux
+          cp ./nixos-with-determinate-x86_64-linux/*.iso ./outputs/nixos-with-determinate.iso-x86_64-linux
+          cp ./nixos-with-determinate-aarch64-linux/*.iso ./outputs/nixos-with-determinate.iso-aarch64-linux
           ls -la outputs outputs/*
 
       - uses: DeterminateSystems/push-artifact-ids@main
