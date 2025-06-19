@@ -68,8 +68,8 @@ jobs:
           mkdir outputs
           find ./nixos-with-determinate-aarch64-linux
           find ./nixos-with-determinate-x86_64-linux
-          cp ./nixos-with-determinate-x86_64-linux/*.iso ./outputs/nixos-with-determinate.iso-x86_64-linux
-          cp ./nixos-with-determinate-aarch64-linux/*.iso ./outputs/nixos-with-determinate.iso-aarch64-linux
+          cp ./nixos-with-determinate-x86_64-linux/*.iso ./outputs/x86_64-linux
+          cp ./nixos-with-determinate-aarch64-linux/*.iso ./outputs/aarch64-linux
           ls -la outputs outputs/*
 
       - uses: DeterminateSystems/push-artifact-ids@main
