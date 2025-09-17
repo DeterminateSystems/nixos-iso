@@ -8,6 +8,13 @@ Our ISOs are available for these systems:
 | x86 Linux     | `x86_64-linux`  |
 | aarch64 Linux | `aarch64-linux` |
 
+You can download the ISOs at these addresses:
+
+| System        | URL                                                                |
+| :------------ | :----------------------------------------------------------------- |
+| x86 Linux     | https://install.determinate.systems/nixos-iso/stable/x86_64-linux  |
+| aarch64 Linux | https://install.determinate.systems/nixos-iso/stable/aarch64-linux |
+
 On both systems, the ISOs have these tools installed:
 
 - [Determinate Nix][det-nix], Determinate Systems' validated and secure [Nix] distribution for enterprises.
@@ -28,7 +35,8 @@ On both systems, the ISOs have these tools installed:
   fh apply nixos "my-org/my-flake/*#nixosConfigurations.my-nixos-configuration-output"
   ```
 
-Note: this NixOS installer image is identical to NixOS's ISOs, but with flakes enabled by default via Determinate Nix and NetworkManager being enabled instead of bare WPA Supplicant.
+> [!NOTE]
+> This NixOS installer image is identical to NixOS's ISOs, but with flakes enabled by default via Determinate Nix and NetworkManager enabled instead of bare WPA Supplicant.
 
 [ami]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html
 [fh-apply-nixos]: https://docs.determinate.systems/flakehub/cli#apply-nixos
