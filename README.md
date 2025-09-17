@@ -36,7 +36,9 @@ On both systems, the ISOs have these tools installed:
   ```
 
 > [!NOTE]
-> This NixOS installer image is identical to NixOS's ISOs, but with flakes enabled by default via Determinate Nix and NetworkManager enabled instead of bare WPA Supplicant.
+> This NixOS installer image is identical to NixOS's ISOs, but with two important differences:
+> 1. Flakes are enabled by default via Determinate Nix
+> 2. NetworkManager is enabled instead of bare WPA Supplicant.
 
 [ami]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html
 [fh-apply-nixos]: https://docs.determinate.systems/flakehub/cli#apply-nixos
