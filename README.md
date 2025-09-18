@@ -12,7 +12,7 @@ You can download the ISOs at these addresses:
 
 | System        | URL                                                                |
 | :------------ | :----------------------------------------------------------------- |
-| x86 Linux     | https://install.determinate.systems/nixos-iso/stable/x86_64-linux  |
+| x86_64 Linux  | https://install.determinate.systems/nixos-iso/stable/x86_64-linux  |
 | aarch64 Linux | https://install.determinate.systems/nixos-iso/stable/aarch64-linux |
 
 On both systems, the ISOs have these tools installed:
